@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARO Systems - Investigación Completa</title>
+    <style>
+        /* ===== NAVEGACIÓN PRINCIPAL ENTRE PÁGINAS ===== */
+        :root {
+            --primary-teal: #008080;
+            --dark-teal: #005f5f;
+            --bg-gray: #e0e0e0;
+            --white: #ffffff;
+            --accent-blue: #e0f2f1;
+            --primary-color: #0b5d5d;
+            --secondary-color: #007bff;
+            --bg-color: #f0f4f8;
+            --sidebar-bg: #e1e8ed;
+            --text-color: #333;
+            --panel-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-gray);
+        }
+
+        /* Barra de navegación principal */
+        #main-nav {
+            background: linear-gradient(135deg, var(--dark-teal) 0%, #117a7a 100%);
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        #main-nav button {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            padding: 16px 24px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+        }
+
+        #main-nav button:hover,
+        #main-nav button.active {
+            color: white;
+            border-bottom: 3px solid white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Páginas */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ===== ESTILOS PÁGINA 1 y 3 (Acordeón) ===== */
+        .acordeon-page {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container-acordeon {
+            width: 1050px;
+            background: var(--white);
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 5px;
+            overflow: hidden;
+            min-height: 85vh;
+        }
+
+        .main-content {
+            padding: 40px;
+            border-right: 1px solid #eee;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            margin-bottom: 35px;
+            border-bottom: 2px solid var(--primary-teal);
+            padding-bottom: 15px;
+        }
+
+        .logo-aro {
+            border: 2px solid var(--primary-teal);
+            padding: 5px 25px;
+            border-radius: 50px;
+            color: var(--primary-teal);
+            font-weight: bold;
+            font-size: 1.6rem;
+            margin-right: 20px;
+        }
+
+        details {
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #eceff1;
+        }
+
+        summary {
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark-teal);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            outline: none;
+        }
+
+        summary:hover { background: var(--accent-blue); }
+        summary::after { content: '+'; font-size: 1.4rem; color: var(--primary-teal); }
+        details[open] summary::after { content: '−'; }
+
+        .content-body {
+            padding: 0 20px 20px 20px;
+            line-height: 1.7;
+            color: #37474f;
+            font-size: 0.95rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        .sidebar-acordeon {
+            background: #fcfcfc;
+            padding: 40px 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-header-btn {
+            background: var(--primary-teal);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 0;
+            display: block;
+        }
+
+        .profile-card {
+            background: white;
+            border: 1px solid #eee;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .profile-img {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #ffffff 0%, #cfd8dc 100%);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .profile-img svg { fill: #78909c; width: 45px; }
+
+        .author-name {
+            font-size: 1.2rem;
+            color: var(--dark-teal);
+            font-weight: 800;
+            margin: 10px 0 5px 0;
+            display: block;
+        }
+
+        .uni-info { font-size: 0.8rem; color: #546e7a; line-height: 1.4; }
+
+        .career-label {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 12px;
+            background: var(--accent-blue);
+            color: var(--dark-teal);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== ESTILOS PÁGINA 2 (Software - Sidebar fijo) ===== */
+        #page-software {
+            display: none;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #page-software.active { display: flex; }
+
+        #sidebar-software {
+            width: 300px;
+            background-color: #ffffff;
+            color: #333;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 53px;
+            height: calc(100% - 53px);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #sidebar-software h2 { font-size: 1.2em; color: #007777; margin-top: 0; margin-bottom: 20px; text-align: center; }
+        #sidebar-software ul { list-style-type: none; padding: 0; width: 100%; }
+        #sidebar-software li { margin-bottom: 10px; }
+        #sidebar-software a { text-decoration: none; color: #555; display: block; padding: 10px; border-radius: 5px; transition: background-color 0.3s, color 0.3s; cursor: pointer; }
+        #sidebar-software a:hover { background-color: #e0f2f1; color: #007777; }
+
+        #content-software {
+            margin-left: 320px;
+            padding: 40px;
+            width: calc(100% - 320px);
+            background-color: #f9f9f9;
+        }
+
+        .section-software { display: none; }
+        .section-software.active { display: block; }
+
+        #content-software h1 { border-bottom: 2px solid #007777; padding-bottom: 10px; margin-bottom: 30px; color: #333; }
+        #content-software h2 { color: #007777; margin-top: 30px; }
+        #content-software p { line-height: 1.6; color: #666; margin-bottom: 15px; }
+
+        #personal-info {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-field { margin-bottom: 15px; display: flex; align-items: center; }
+        .info-label { font-weight: bold; color: #007777; width: 150px; }
+        .info-value { color: #333; }
+
+        /* ===== ESTILOS PÁGINA 4 (Redes) ===== */
+        #page-redes { display: none; flex-direction: column; min-height: 80vh; }
+        #page-redes.active { display: flex; }
+
+        #page-redes header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #117a7a 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        #page-redes header h1 { margin: 0; font-size: 2.5em; font-weight: 300; letter-spacing: 1px; }
+        #page-redes header p { margin: 10px 0 0; font-size: 1.2em; opacity: 0.9; }
+
+        .container-redes {
+            display: flex;
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 20px;
+        }
+
+        nav.nav-redes {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-right: 20px;
+            position: sticky;
+            top: 73px;
+            height: fit-content;
+        }
+
+        nav.nav-redes h3 {
+            color: var(--primary-color);
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        nav.nav-redes ul { list-style: none; padding: 0; margin: 0; }
+        nav.nav-redes li { margin-bottom: 15px; }
+        nav.nav-redes a {
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 1.05em;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        nav.nav-redes a:hover { background-color: var(--primary-color); color: white; transform: translateX(5px); }
+
+        .menu-icon { margin-right: 12px; font-size: 1.3em; }
+
+        main.main-redes { flex: 1; }
+
+        section.sec-redes {
+            display: none;
+            background-color: var(--panel-bg);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        section.sec-redes.active { display: block; }
+
+        section.sec-redes h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid #e1e8ed;
+            padding-bottom: 15px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        h3.sub-title { color: #117a7a; margin-top: 30px; margin-bottom: 15px; font-size: 1.5em; font-weight: 500; }
+
+        section.sec-redes p { line-height: 1.8; font-size: 1.1em; margin-bottom: 20px; color: #555; }
+
+        img.topic-img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0 30px 0;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            display: block;
+            transition: var(--transition);
+        }
+
+        img.topic-img:hover { transform: scale(1.02); }
+
+        section.sec-redes ul { list-style: none; padding: 0; margin-bottom: 30px; }
+        section.sec-redes li { position: relative; padding-left: 30px; margin-bottom: 12px; font-size: 1.05em; color: #555; }
+        section.sec-redes li::before { content: '✓'; position: absolute; left: 0; color: var(--secondary-color); font-weight: bold; }
+
+        .perfil-card {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-top: 20px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .perfil-img-container {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 40px;
+            border: 6px solid white;
+            box-shadow: var(--shadow);
+        }
+
+        .perfil-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .perfil-info p { margin: 10px 0; font-size: 1.15em; }
+        .perfil-info b { color: var(--primary-color); margin-right: 10px; }
+
+        footer.footer-redes {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container-acordeon { width: 100%; grid-template-columns: 1fr; }
+            .container-redes { flex-direction: column; padding: 10px; }
+            nav.nav-redes { width: 100%; margin-right: 0; margin-bottom: 20px; position: relative; top: 0; }
+            #sidebar-software { position: relative; width: 100%; top: 0; height: auto; }
+            #content-software { margin-left: 0; width: 100%; }
+            .perfil-card { flex-direction: column; text-align: center; }
+            .perfil-img-container { margin-right: 0; margin-bottom: 20px; }
+            #main-nav button { padding: 12px 10px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- BARRA DE NAVEGACIÓN PRINCIPAL -->
+<nav id="main-nav">
+    <button class="active" onclick="showPage('page-computacion')">💻 Computación</button>
+    <button onclick="showPage('page-hardware')">🖥️ Hardware</button>
+    <button onclick="showPage('page-software')">⚙️ Software</button>
+    <button onclick="showPage('page-redes')">🌐 Redes</button>
+</nav>
+
+
+<!-- ========== PÁGINA 1: INTRODUCCIÓN A LA COMPUTACIÓN ========== -->
+<div id="page-computacion" class="page active acordeon-page">
+    <div class="container-acordeon">
+        <main class="main-content">
+            <div class="header-top">
+                <div class="logo-aro">&lt;ARO/&gt;</div>
+                <h2 style="margin:0; color: var(--primary-teal);">Introducción a la Computación</h2>
+            </div>
+            <details>
+                <summary>1. ¿Qué es una Computadora?</summary>
+                <div class="content-body">
+                    Una computadora es una máquina electrónica capaz de recibir datos, procesarlos mediante un conjunto de instrucciones programadas y entregar resultados útiles. Su potencia radica en la velocidad de procesamiento y su capacidad casi infinita de almacenamiento de información digital.
+                </div>
+            </details>
+            <details>
+                <summary>2. Evolución y Generaciones</summary>
+                <div class="content-body">
+                    Desde el ábaco hasta la computación en la nube, el camino ha sido largo:
+                    <ul>
+                        <li><strong>Primera Generación:</strong> Uso de tubos de vacío y tarjetas perforadas.</li>
+                        <li><strong>Segunda Generación:</strong> Incorporación del transistor, permitiendo equipos más pequeños.</li>
+                        <li><strong>Tercera Generación:</strong> Invención de los circuitos integrados (chips de silicio).</li>
+                        <li><strong>Cuarta Generación:</strong> El microprocesador permite la revolución de la PC.</li>
+                    </ul>
+                </div>
+            </details>
+            <details>
+                <summary>3. Arquitectura Básica del Sistema</summary>
+                <div class="content-body">
+                    Todo sistema computacional moderno sigue el esquema de <strong>Entrada, Procesamiento y Salida</strong>. Los componentes se comunican a través de buses de datos, permitiendo que la información fluya desde los periféricos hacia la CPU y la memoria.
+                </div>
+            </details>
+            <details>
+                <summary>4. Clasificación según su Uso</summary>
+                <div class="content-body">
+                    Existen diversos tipos según su capacidad:
+                    <ul>
+                        <li><strong>Supercomputadoras:</strong> Para investigación nuclear y climática.</li>
+                        <li><strong>Mainframes:</strong> Para transacciones bancarias masivas.</li>
+                        <li><strong>Estaciones de Trabajo:</strong> Para diseño gráfico e ingeniería avanzada.</li>
+                        <li><strong>Microcomputadoras:</strong> Smartphones, tablets y computadoras portátiles.</li>
+                    </ul>
+                </div>
+            </details>
+        </main>
+        <aside class="sidebar-acordeon">
+            <details>
+                <summary class="info-header-btn">INFORMACIÓN ACADÉMICA</summary>
+                <div class="profile-card">
+                    <div class="profile-img">
+                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                    <span class="author-name">Diego Armando Quispe Mattos</span>
+                    <div class="uni-info"><strong>UBI</strong><br>UNIVERSIDAD BOLIVIANA DE INFORMÁTICA</div>
+                    <div class="career-label">Ingeniería en Sistemas</div>
+                </div>
+            </details>
+            <div style="margin-top: 20px; font-size: 0.8rem; color: #999; text-align: center; font-style: italic;">
+                * Haga clic en los títulos para desplegar la investigación o su perfil.
+            </div>
+        </aside>
+    </div>
+</div>
+
+
+<!-- ========== PÁGINA 2: HARDWARE ========== -->
+<div id="page-hardware" class="page acordeon-page">
+    <div class="container-acordeon">
+        <main class="main-content">
+            <div class="header-top">
+                <div class="logo-aro">&lt;ARO/&gt;</div>
+                <h2 style="margin:0; color: var(--primary-teal);">Investigación de Hardware</h2>
+            </div>
+            <details>
+                <summary>1. Conceptos Fundamentales</summary>
+                <div class="content-body">
+                    El hardware se define como la parte física de la informática. Comprende todos los componentes electrónicos, electromecánicos y mecánicos que permiten el procesamiento de datos. Es la base material sobre la cual el software puede ejecutar sus algoritmos.
+                </div>
+            </details>
+            <details>
+                <summary>2. Unidad Central de Procesamiento (CPU)</summary>
+                <div class="content-body">
+                    Conocida como el cerebro de la computadora, la CPU interpreta instrucciones y procesa datos. Se compone de la Unidad Aritmético Lógica (ALU) y la Unidad de Control (CU). Su potencia se mide actualmente por su frecuencia de reloj (GHz) y la cantidad de núcleos de procesamiento independientes.
+                </div>
+            </details>
+            <details>
+                <summary>3. Memoria Principal y Secundaria</summary>
+                <div class="content-body">
+                    La jerarquía de memoria es vital para el rendimiento:
+                    <ul>
+                        <li><strong>Memoria RAM:</strong> Almacenamiento volátil de acceso rápido para procesos activos.</li>
+                        <li><strong>Unidades de Estado Sólido (SSD):</strong> Almacenamiento persistente basado en memoria flash, mucho más veloz que los antiguos discos magnéticos.</li>
+                        <li><strong>Memoria Caché:</strong> Almacenamiento ultra rápido integrado en el procesador.</li>
+                    </ul>
+                </div>
+            </details>
+            <details>
+                <summary>4. Placa Base y Periféricos</summary>
+                <div class="content-body">
+                    La <strong>Motherboard</strong> es el circuito que interconecta todos los componentes. Los periféricos se dividen en:
+                    <ul>
+                        <li><strong>Entrada:</strong> Teclado, mouse, cámaras.</li>
+                        <li><strong>Salida:</strong> Monitores de alta resolución, impresoras.</li>
+                        <li><strong>Mixtos:</strong> Pantallas táctiles y unidades de almacenamiento externo.</li>
+                    </ul>
+                </div>
+            </details>
+        </main>
+        <aside class="sidebar-acordeon">
+            <details>
+                <summary class="info-header-btn">INFORMACIÓN DEL AUTOR</summary>
+                <div class="profile-card">
+                    <div class="profile-img">
+                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                    <span class="author-name">Diego Armando Quispe Mattos</span>
+                    <div class="uni-info"><strong>UBI</strong><br>UNIVERSIDAD BOLIVIANA DE INFORMÁTICA</div>
+                    <div class="career-label">Ingeniería en Sistemas</div>
+                </div>
+            </details>
+            <div style="margin-top: 20px; font-size: 0.8rem; color: #999; text-align: center; font-style: italic;">
+                * Haga clic en los títulos para desplegar la investigación o su perfil.
+            </div>
+        </aside>
+    </div>
+</div>
+
+
+<!-- ========== PÁGINA 3: SOFTWARE ========== -->
+<div id="page-software" class="page">
+    <div id="sidebar-software">
+        <h2>Temas de Software</h2>
+        <ul>
+            <li><a onclick="showSoftwareSection('inicio-sw')">1. Inicio</a></li>
+            <li><a onclick="showSoftwareSection('introduccion')">2. Introducción al Software</a></li>
+            <li><a onclick="showSoftwareSection('clasificacion')">3. Clasificación del Software</a></li>
+            <li><a onclick="showSoftwareSection('ciclo-vida')">4. Ciclos de Vida del Software</a></li>
+            <li><a onclick="showSoftwareSection('metodologias')">5. Metodologías de Desarrollo</a></li>
+            <li><a onclick="showSoftwareSection('calidad')">6. Calidad del Software</a></li>
+            <li><a onclick="showSoftwareSection('tendencias')">7. Tendencias Actuales</a></li>
+            <li><a onclick="showSoftwareSection('personal-info')">👤 Información Personal</a></li>
+        </ul>
+    </div>
+    <div id="content-software">
+        <div id="inicio-sw" class="section-software active">
+            <h1>Bienvenido a la Guía Completa de Software</h1>
+            <p>Utiliza el menú de la izquierda para explorar los diferentes temas relacionados con la ingeniería de software, desde sus conceptos básicos hasta los complejos ciclos de vida y las tendencias más modernas.</p>
+        </div>
+        <div id="introduccion" class="section-software">
+            <h1>1. Introducción al Software y la Ingeniería de Software</h1>
+            <h2>¿Qué es el Software?</h2>
+            <p>El software es el conjunto de programas de cómputo, procedimientos, reglas, documentación y datos asociados que forman parte de las operaciones de un sistema de computación. A diferencia del hardware, que es tangible, el software es el componente lógico.</p>
+            <h2>¿Qué es la Ingeniería de Software?</h2>
+            <p>La Ingeniería de Software es una disciplina de la ingeniería que se ocupa de todos los aspectos de la producción de software, desde las etapas iniciales de la especificación del sistema hasta el mantenimiento del sistema después de que se ha puesto en uso.</p>
+        </div>
+        <div id="clasificacion" class="section-software">
+            <h1>2. Clasificación del Software</h1>
+            <p>El software se puede clasificar en varias categorías principales basadas en su función y propósito:</p>
+            <ul>
+                <li><strong>Software de Sistema:</strong> Programas que gestionan y controlan el hardware de la computadora, como sistemas operativos (Windows, Linux, macOS).</li>
+                <li><strong>Software de Aplicación:</strong> Programas diseñados para ayudar a los usuarios a realizar tareas específicas, como procesadores de texto, hojas de cálculo y navegadores web.</li>
+                <li><strong>Software de Programación:</strong> Programas utilizados por los programadores para crear otros programas, como compiladores, depuradores y editores de texto.</li>
+            </ul>
+        </div>
+        <div id="ciclo-vida" class="section-software">
+            <h1>3. Ciclos de Vida del Software (SDLC)</h1>
+            <p>El Ciclo de Vida del Desarrollo de Software (SDLC) es un proceso estructurado utilizado para planificar, crear, probar y desplegar un sistema de información.</p>
+            <h2>Etapas Comunes del SDLC</h2>
+            <ol>
+                <li><strong>Planificación y Análisis de Requisitos:</strong> Definir qué debe hacer el software.</li>
+                <li><strong>Diseño:</strong> Crear la arquitectura del software.</li>
+                <li><strong>Implementación (Codificación):</strong> Los desarrolladores escriben el código.</li>
+                <li><strong>Pruebas (Testing):</strong> Verificar que el software funcione correctamente.</li>
+                <li><strong>Despliegue (Deployment):</strong> El software se pone a disposición de los usuarios.</li>
+                <li><strong>Mantenimiento:</strong> Se corrigen errores y se añaden nuevas funcionalidades.</li>
+            </ol>
+        </div>
+        <div id="metodologias" class="section-software">
+            <h1>4. Metodologías de Desarrollo</h1>
+            <h2>Metodologías Tradicionales (Ej: Cascada)</h2>
+            <p>Es un enfoque lineal y secuencial donde cada etapa del ciclo de vida debe completarse antes de pasar a la siguiente. Es rígido y difícil de cambiar una vez que comienza.</p>
+            <h2>Metodologías Ágiles (Ej: Scrum, Kanban)</h2>
+            <p>Es un enfoque iterativo e incremental. Se centra en la entrega temprana y continua de software valioso, la colaboración con el cliente y la respuesta al cambio.</p>
+        </div>
+        <div id="calidad" class="section-software">
+            <h1>5. Calidad del Software</h1>
+            <p>La calidad del software no se refiere solo a la ausencia de errores, sino a un conjunto de atributos medibles:</p>
+            <ul>
+                <li><strong>Funcionalidad:</strong> ¿Hace lo que se supone que debe hacer?</li>
+                <li><strong>Fiabilidad:</strong> ¿Es robusto y estable?</li>
+                <li><strong>Usabilidad:</strong> ¿Es fácil de aprender y usar?</li>
+                <li><strong>Eficiencia:</strong> ¿Utiliza los recursos del sistema de manera óptima?</li>
+                <li><strong>Mantenibilidad:</strong> ¿Es fácil de modificar o corregir?</li>
+                <li><strong>Portabilidad:</strong> ¿Puede funcionar en diferentes plataformas?</li>
+            </ul>
+        </div>
+        <div id="tendencias" class="section-software">
+            <h1>6. Tendencias Actuales en Software</h1>
+            <ul>
+                <li><strong>Inteligencia Artificial (IA) y Machine Learning:</strong> Integración de capacidades de IA en todo tipo de aplicaciones.</li>
+                <li><strong>Computación en la Nube (Cloud Computing):</strong> El cambio a servicios basados en la nube (AWS, Azure, Google Cloud).</li>
+                <li><strong>Ciberseguridad:</strong> Proteger el software y los datos de amenazas complejas.</li>
+                <li><strong>Internet de las Cosas (IoT):</strong> Desarrollo de software para dispositivos conectados.</li>
+                <li><strong>Microservicios:</strong> Arquitectura que construye aplicaciones como servicios independientes.</li>
+            </ul>
+        </div>
+        <div id="personal-info" class="section-software">
+            <h1>Información de Contacto</h1>
+            <div style="background:#fff; padding:30px; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+                <h2 style="text-align:center">Datos Personales</h2>
+                <div class="info-field"><span class="info-label">Nombre Completo:</span><span class="info-value">Diego Armando Quispe Mattos</span></div>
+                <div class="info-field"><span class="info-label">Universidad:</span><span class="info-value">UBI, UNIVERSIDAD BOLIVIANA DE INFORMÁTICA</span></div>
+                <div class="info-field"><span class="info-label">Carrera:</span><span class="info-value">Ingeniería en Sistemas</span></div>
+                <p style="text-align:center; margin-top:30px; color:#999;">Esta página fue creada como parte de un proyecto académico sobre ingeniería de software.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ========== PÁGINA 4: REDES ========== -->
+<div id="page-redes" class="page">
+    <header>
+        <h1>Investigación sobre Redes</h1>
+        <p>ARO Systems · Soluciones Tecnológicas Integrales</p>
+    </header>
+    <div class="container-redes">
+        <nav class="nav-redes">
+            <h3>TEMAS</h3>
+            <ul>
+                <li><a onclick="mostrar('intro')"><span class="menu-icon">🌐</span>Introducción</a></li>
+                <li><a onclick="mostrar('osi')"><span class="menu-icon">📊</span>Modelo OSI y TCP/IP</a></li>
+                <li><a onclick="mostrar('protocolos')"><span class="menu-icon">📜</span>Protocolos</a></li>
+                <li><a onclick="mostrar('topologias')"><span class="menu-icon">🕸️</span>Topologías</a></li>
+                <li><a onclick="mostrar('software-red')"><span class="menu-icon">💻</span>Software y Simuladores</a></li>
+                <li><a onclick="mostrar('dispositivos')"><span class="menu-icon">📡</span>Dispositivos</a></li>
+                <li><a onclick="mostrar('cableado')"><span class="menu-icon">🔌</span>Cableado UTP</a></li>
+                <li><a onclick="mostrar('perfil')"><span class="menu-icon">👤</span>Información Personal</a></li>
+            </ul>
+        </nav>
+        <main class="main-redes">
+            <section id="intro" class="sec-redes active">
+                <h2>Introducción a las Redes</h2>
+                <h3 class="sub-title">¿Qué son las redes de computadoras?</h3>
+                <p>Las redes de computadoras son sistemas fundamentales de comunicación que permiten la interconexión de múltiples dispositivos con el fin primordial de compartir información, recursos y servicios.</p>
+                <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Visualización de una red global de datos">
+                <h3 class="sub-title">Importancia en el mundo moderno</h3>
+                <p>Gracias a las redes, hoy es posible enviar mensajes instantáneos, realizar videollamadas, acceder a grandes volúmenes de información en tiempo real y trabajar de forma colaborativa desde cualquier lugar del mundo.</p>
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Personas colaborando digitalmente">
+            </section>
+            <section id="osi" class="sec-redes">
+                <h2>Modelos de Referencia: OSI y TCP/IP</h2>
+                <h3 class="sub-title">El Modelo OSI (7 Capas)</h3>
+                <p><b>El modelo OSI</b> es un estándar de 7 capas que ayuda a entender el proceso de comunicación desde el hardware físico hasta la aplicación del usuario.</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Osi-model-jb.svg" class="topic-img" alt="Diagrama del Modelo OSI">
+                <h3 class="sub-title">El Modelo TCP/IP (4 Capas)</h3>
+                <p><b>El modelo TCP/IP</b> es el protocolo pragmático utilizado en Internet, simplificando el proceso en 4 capas clave.</p>
+                <img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Abstracto de flujo de datos en capas">
+            </section>
+            <section id="protocolos" class="sec-redes">
+                <h2>Protocolos de Comunicación</h2>
+                <h3 class="sub-title">¿Qué es un protocolo?</h3>
+                <p>Los protocolos son el "lenguaje" de la red. Son conjuntos de reglas y estándares que permiten que dispositivos heterogéneos se comuniquen correctamente.</p>
+                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Tecnología de comunicación">
+                <h3 class="sub-title">Protocolos Fundamentales</h3>
+                <ul>
+                    <li><b>HTTP:</b> Para la navegación web.</li>
+                    <li><b>IP:</b> Para el direccionamiento y enrutamiento.</li>
+                    <li><b>TCP:</b> Para asegurar transmisiones fiables.</li>
+                    <li><b>DNS:</b> Para traducir nombres de dominio.</li>
+                </ul>
+            </section>
+            <section id="topologias" class="sec-redes">
+                <h2>Topologías de Red</h2>
+                <h3 class="sub-title">Disposición Física y Lógica</h3>
+                <p>La topología de red define la disposición física o lógica de los dispositivos y sus conexiones.</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/97/NetworkTopologies.svg" class="topic-img" alt="Diagramas de topologías comunes">
+                <h3 class="sub-title">Topologías Comunes</h3>
+                <ul>
+                    <li><b>Estrella:</b> Centralizada en un switch. Fácil de diagnosticar.</li>
+                    <li><b>Malla:</b> Redundante. Alta fiabilidad, pero costosa.</li>
+                    <li><b>Bus:</b> Un solo cable troncal.</li>
+                </ul>
+            </section>
+            <section id="software-red" class="sec-redes">
+                <h2>Software de Red y Simuladores</h2>
+                <h3 class="sub-title">Software de Administración y Monitoreo</h3>
+                <p>El software de red es crucial para la administración, monitoreo y seguridad de la red.</p>
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Monitoreo de red">
+                <h3 class="sub-title">Simuladores como Herramientas Educativas</h3>
+                <p><b>Cisco Packet Tracer</b> permite a estudiantes diseñar, configurar y solucionar problemas de redes en un entorno virtual seguro.</p>
+            </section>
+            <section id="dispositivos" class="sec-redes">
+                <h2>Dispositivos de Red Esenciales</h2>
+                <h3 class="sub-title">Hardware de Interconexión</h3>
+                <p>Para construir una red funcional, se requieren dispositivos que gestionen el flujo de datos y conecten los hosts de manera eficiente.</p>
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Rack de servidores">
+                <ul>
+                    <li><b>Router:</b> Conecta redes distintas y determina la mejor ruta.</li>
+                    <li><b>Switch:</b> Conecta dispositivos dentro de una misma LAN.</li>
+                    <li><b>Access Point:</b> Permite la conexión inalámbrica Wi-Fi.</li>
+                </ul>
+            </section>
+            <section id="cableado" class="sec-redes">
+                <h2>Cableado UTP y Códigos de Colores</h2>
+                <h3 class="sub-title">El Medio Físico Estándar</h3>
+                <p>El cable UTP (Unshielded Twisted Pair) es el estándar físico más utilizado para redes LAN cableadas.</p>
+                <img src="https://images.unsplash.com/photo-1629618195886-f4f9f44a377d?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Conector RJ-45">
+                <h3 class="sub-title">Los Estándares T568A y T568B</h3>
+                <p>Los estándares T568A y T568B definen el orden preciso de los 8 hilos de colores. El T568B es el más extendido universalmente.</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/RJ-45_T568B.svg" class="topic-img" style="max-width:400px; margin-left:auto; margin-right:auto;" alt="Diagrama T568B">
+            </section>
+            <section id="perfil" class="sec-redes">
+                <h2>Información del Estudiante</h2>
+                <div class="perfil-card">
+                    <div class="perfil-img-container">
+                        <img src="image_0.png" alt="Foto de perfil de Diego Armando">
+                    </div>
+                    <div class="perfil-info">
+                        <p><b>Nombre:</b> Diego Armando Quispe Mattos</p>
+                        <p><b>Curso:</b> Fundamentos de Redes de Computadoras</p>
+                        <p><b>Institución:</b> U.B.I. (Universidad Boliviana Internacional)</p>
+                        <p><b>Año:</b> 2026</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <footer class="footer-redes">
+        <p>ARO Systems © 2026 · Proyecto de Investigación Estudiantil</p>
+    </footer>
+</div>
+
+
+<script>
+    // Navegación principal entre páginas
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    // Navegación secciones de Software
+    function showSoftwareSection(sectionId) {
+        document.querySelectorAll('.section-software').forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+    }
+
+    // Navegación secciones de Redes
+    function mostrar(id) {
+        document.querySelectorAll('.sec-redes').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelector('.main-redes').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
